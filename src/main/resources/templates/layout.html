@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html th:fragment="layout (title, content)" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:replace="${title}">Bookstore</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+  </head>
+  <body>
+    <div class="p-4">
+      <h1 class="text-xl font-bold text-pink-700">Welcome to the Bookstore</h1>
+
+      <main th:replace="${content}">
+        <p>Tän ei pitäis näkyä</p>
+      </main>
+
+    </div>  
+  </body>
+</html>
