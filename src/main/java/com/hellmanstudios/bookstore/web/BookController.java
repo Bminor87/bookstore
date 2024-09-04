@@ -3,12 +3,17 @@ package com.hellmanstudios.bookstore.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import com.hellmanstudios.bookstore.domain.Book;
 import com.hellmanstudios.bookstore.repository.BookRepository;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 
@@ -27,9 +32,31 @@ private BookRepository repository;
         return "index";
     }
 
-    @GetMapping("test")
-    public String simpleTestRemoveLater() {
-        return "test";
+    @GetMapping("/addbook")
+    public String addBook(Model model) {
+        model.addAttribute("book", new Book());
+        return "bookform";
+    }
+
+    @GetMapping("/editbook/{id}")
+    public String editBook(@PathVariable("id") Long bookId, Model model) {
+        Book book = repository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
+        model.addAttribute("book", book);
+        model.addAttribute("editing", true);
+        return "bookform";
+    }
+
+    @PostMapping("/savebook")
+    public String saveBook(@ModelAttribute Book book, RedirectAttributes redirectAttributes) {
+        repository.save(book);
+        return "redirect:/booklist";
+    }
+
+    @GetMapping("/deletebook/{id}")
+    public String deleteBook(@PathVariable("id") Long bookId) {
+        Book book = repository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
+        repository.delete(book);
+        return "redirect:/booklist";
     }
 
     @RequestMapping(value= {"/", "booklist"})
@@ -37,6 +64,5 @@ private BookRepository repository;
         model.addAttribute("books", repository.findAll());
         return "booklist";
     }
-    
     
 }
