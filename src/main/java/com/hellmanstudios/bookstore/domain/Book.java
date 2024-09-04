@@ -1,22 +1,33 @@
 package com.hellmanstudios.bookstore.domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Book {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String title, author, isbn;
     private int publicationYear;
     private double price;
 
     public Book() {
-        this.title = "";
-        this.author = "";
-        this.isbn = "";
-        this.publicationYear = 1970;
-        this.price = 0;
+
     }
 
-    public Book(String title, String author, String isbn, int publicationYear, double price) {
-        this.title = title;
+    public Book(String author, String title) {
         this.author = author;
+        this.title = title;
+    }
+
+    public Book(String author, String title, String isbn, int publicationYear, double price) {
+        this.author = author;
+        this.title = title;
         this.isbn = isbn;
         this.publicationYear = publicationYear;
         this.price = price;
