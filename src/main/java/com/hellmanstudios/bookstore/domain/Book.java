@@ -6,6 +6,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Book {
@@ -14,8 +18,18 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title, author, isbn;
+    @NotBlank(message = "Title is required")
+    private String title;
+
+    @NotEmpty(message = "Author is required")
+    private String author;
+
+    @Size(min=10, max=13, message="Invalid ISBN")
+    private String isbn;
+    
+    @Max(2025)
     private int publicationYear;
+
     private double price;
 
     @ManyToOne
@@ -24,6 +38,14 @@ public class Book {
 
     public Book() {
 
+    }
+
+    public Book(String author, String title, String isbn, int publicationYear, double price) {
+        this.author = author;
+        this.title = title;
+        this.isbn = isbn;
+        this.publicationYear = publicationYear;
+        this.price = price;
     }
 
     public Book(String author, String title, String isbn, int publicationYear, double price, Category category) {

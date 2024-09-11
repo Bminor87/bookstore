@@ -42,7 +42,7 @@
 
                   <tbody class="bg-white">
                     <tr th:each="book: ${books}" class="even:bg-gray-50">
-                      <td th:text="${book.getCategory().name}" class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
+                      <td th:text="${book.getCategory() != null ? book.getCategory().name : 'Unknown'}" class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
                       <td th:text="${book.getAuthor()}" class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
                       <td th:text="${book.getTitle()}" class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3"></td>
                       <td th:text="${book.getIsbn()}" class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
