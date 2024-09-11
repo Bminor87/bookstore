@@ -1,5 +1,8 @@
 package com.hellmanstudios.bookstore;
 
+import org.slf4j.Logger;
+
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +16,8 @@ import com.hellmanstudios.bookstore.repository.CategoryRepository;
 @SpringBootApplication
 public class BookstoreApplication {
 
+	private static final Logger log = LoggerFactory.getLogger(BookstoreApplication.class);
+
 	public static void main(String[] args) {
 		SpringApplication.run(BookstoreApplication.class, args);
 	}
@@ -21,6 +26,7 @@ public class BookstoreApplication {
 	public CommandLineRunner demo(BookRepository bookRepository, CategoryRepository categoryRepository) {
 		return (args) -> {
 
+			log.info("Creating a few categories");
 			categoryRepository.save(new Category("Fantasy"));
 			categoryRepository.save(new Category("Science Fiction"));
 			categoryRepository.save(new Category("Horror"));

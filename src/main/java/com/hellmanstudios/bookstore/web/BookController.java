@@ -1,5 +1,7 @@
 package com.hellmanstudios.bookstore.web;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.hellmanstudios.bookstore.BookstoreApplication;
 import com.hellmanstudios.bookstore.domain.Book;
 import com.hellmanstudios.bookstore.repository.BookRepository;
 import com.hellmanstudios.bookstore.repository.CategoryRepository;
@@ -15,7 +18,6 @@ import com.hellmanstudios.bookstore.repository.CategoryRepository;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
@@ -26,6 +28,8 @@ public class BookController {
 private BookRepository bookRepository;
 @Autowired
 private CategoryRepository categoryRepository;
+
+    private static final Logger log = LoggerFactory.getLogger(BookstoreApplication.class);
 
     @GetMapping("*")
     public String fallback() {
@@ -56,10 +60,11 @@ private CategoryRepository categoryRepository;
 
     @PostMapping("/savebook")
     public String saveBook(@Valid @ModelAttribute("book") Book book, BindingResult bindingResult, Model model) {
+        log.info("validating input for book id: " + book.getId());
         if (bindingResult.hasErrors()) {
             model.addAttribute("book", book);
             model.addAttribute("categories", categoryRepository.findAll());
-            model.addAttribute("editing", false);
+            model.addAttribute("editing", book.getId() != null);
             return "bookform";
         }
         bookRepository.save(book);
