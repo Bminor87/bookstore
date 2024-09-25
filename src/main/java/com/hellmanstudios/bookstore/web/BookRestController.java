@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,7 +55,8 @@ public class BookRestController {
         editedBook.setId(id);
         return bookRepository.save(editedBook);
     }
-
+    
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/book/{id}")
     List<Book> deleteBook(@PathVariable("id") Long bookId) {
         bookRepository.deleteById(bookId);

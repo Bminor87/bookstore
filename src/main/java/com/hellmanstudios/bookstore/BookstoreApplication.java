@@ -10,8 +10,10 @@ import org.springframework.context.annotation.Bean;
 
 import com.hellmanstudios.bookstore.domain.Book;
 import com.hellmanstudios.bookstore.domain.Category;
+import com.hellmanstudios.bookstore.domain.User;
 import com.hellmanstudios.bookstore.repository.BookRepository;
 import com.hellmanstudios.bookstore.repository.CategoryRepository;
+import com.hellmanstudios.bookstore.repository.UserRepository;
 
 @SpringBootApplication
 public class BookstoreApplication {
@@ -23,7 +25,7 @@ public class BookstoreApplication {
 	}
 
 	@Bean
-	public CommandLineRunner demo(BookRepository bookRepository, CategoryRepository categoryRepository) {
+	public CommandLineRunner demo(BookRepository bookRepository, CategoryRepository categoryRepository, UserRepository userRepository) {
 		return (args) -> {
 
 			log.info("Creating a few categories");
@@ -74,6 +76,12 @@ public class BookstoreApplication {
 			bookRepository.save(new Book("Ernest Hemingway", "The Old Man and the Sea", "9780684830490", 1952, 13.99, adventure));
 			bookRepository.save(new Book("Gabriel García Márquez", "One Hundred Years of Solitude", "9780060883287", 1967, 16.99, fantasy));
 			bookRepository.save(new Book("Isaac Asimov", "Foundation", "9780553293357", 1951, 17.99, scienceFiction));
+
+			userRepository.save(new User("admin", "admin", "ADMIN"));
+			userRepository.save(new User("user", "user", "USER"));
+
+			User test = userRepository.findById(1L).get();
+			log.info("The hashed password is: " + test.getPassword());
 			
 		};
 	}

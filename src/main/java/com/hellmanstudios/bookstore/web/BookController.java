@@ -3,6 +3,7 @@ package com.hellmanstudios.bookstore.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -41,6 +42,11 @@ private CategoryRepository categoryRepository;
         return "index";
     }
 
+    @GetMapping("login")
+    public String login() {	
+        return "login";
+    }	
+
     @GetMapping("/addbook")
     public String addBook(Model model) {
         model.addAttribute("book", new Book());
@@ -71,6 +77,7 @@ private CategoryRepository categoryRepository;
         return "redirect:/booklist";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/deletebook/{id}")
     public String deleteBook(@PathVariable("id") Long bookId) {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + bookId));
