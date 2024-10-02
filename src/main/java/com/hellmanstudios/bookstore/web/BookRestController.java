@@ -17,6 +17,7 @@ import java.util.List;
 import com.hellmanstudios.bookstore.domain.Book;
 import com.hellmanstudios.bookstore.repository.BookRepository;
 
+import io.micrometer.core.ipc.http.HttpSender.Response;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,24 +41,25 @@ public class BookRestController {
         return (List<Book>) bookRepository.findAll();
     }
 
-    @GetMapping("/book/{id}")
+    @GetMapping("/books/{id}")
     <Optional>Book findBook(@PathVariable("id") Long bookId) {
         return bookRepository.findById(bookId).orElse(null);
     }
 
-    @PostMapping("/book")
-    Book newBook(@RequestBody Book newBook) {
-        return bookRepository.save(newBook);
+    @PostMapping("/books")
+    ResponseEntity<Book> newBook(@RequestBody Book newBook) {
+        Book savedBook = bookRepository.save(newBook);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
     }
 
-    @PutMapping("/book/{id}")
+    @PutMapping("/books/{id}")
     Book editBook(@RequestBody Book editedBook, @PathVariable Long id) {
         editedBook.setId(id);
         return bookRepository.save(editedBook);
     }
     
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/book/{id}")
+    @DeleteMapping("/books/{id}")
     List<Book> deleteBook(@PathVariable("id") Long bookId) {
         bookRepository.deleteById(bookId);
         return (List<Book>) bookRepository.findAll();
