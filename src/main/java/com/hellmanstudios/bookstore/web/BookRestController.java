@@ -25,10 +25,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 
-
-
-
-
 @RestController
 @RequestMapping("/api")
 public class BookRestController {
@@ -46,14 +42,16 @@ public class BookRestController {
         return bookRepository.findById(bookId).orElse(null);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/books")
-    ResponseEntity<Book> newBook(@RequestBody Book newBook) {
+    ResponseEntity<Book> newBook(@Valid @RequestBody Book newBook) {
         Book savedBook = bookRepository.save(newBook);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/books/{id}")
-    Book editBook(@RequestBody Book editedBook, @PathVariable Long id) {
+    Book editBook(@Valid @RequestBody Book editedBook, @PathVariable Long id) {
         editedBook.setId(id);
         return bookRepository.save(editedBook);
     }
